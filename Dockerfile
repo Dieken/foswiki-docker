@@ -1,8 +1,8 @@
-ARG base=debian:11
+ARG base=debian:12
 FROM $base
 
-ARG url=https://github.com/foswiki/distro/releases/download/FoswikiRelease02x01x07/Foswiki-2.1.7.tgz
-ARG sha512=7196ce5a586a3770e2d198a79d0856f34724893746a40500b7f72d3efc48dcbdfb0292a3583186cf4e5b217a70df3b5dd8af80aa3e5c34987ca202a62dada0bf
+ARG url=https://github.com/foswiki/distro/releases/download/FoswikiRelease02x01x08/Foswiki-2.1.8.tgz
+ARG sha512=8d93e1eed145e5422380a20e0945aa759b1b9f1c3f6000213b1c28e15006f152c5330e89d313d75b1991c8a9dadc4766091f17721830b312ab8ced97ac92520d
 ARG root=/var/www/foswiki
 ARG user=www-data
 ARG group=www-data
@@ -14,7 +14,7 @@ ARG mirror=""
 ENV LANG=$lang TZ=$tz
 
 RUN set -eux; \
-    [ -z "$mirror" ] || sed -i -E "s|http(s?)://deb.debian.org|$mirror|" /etc/apt/sources.list; \
+    [ -z "$mirror" ] || sed -i -E "s|http(s?)://deb.debian.org|$mirror|; s/^(Suites:\s+\w+\s+(\w+)-updates)/\1 \2-backports/" /etc/apt/sources.list.d/debian.sources; \
     apt update -y \
     && apt install -y curl diffutils grep less logrotate vim w3m \
         apache2 libapache2-mod-fcgid libapache2-mod-perl2 nginx \
